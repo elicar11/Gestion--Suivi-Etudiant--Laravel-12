@@ -12,16 +12,31 @@
                     <label>Matricule</label>
                     <input type="text" name="matricule" value="{{ old('matricule') }}" placeholder="Ex: MAT-001"
                         required>
+                    @error('matricule')
+                        <span style="color: #ef4444; font-size: 0.75rem; margin-top: 5px; display: block;">
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <label>Nom</label>
                     <input type="text" name="nom" value="{{ old('nom') }}" placeholder="Nom de l'étudiant"
                         required>
+                    @error('nom')
+                        <span style="color: #ef4444; font-size: 0.75rem; margin-top: 5px; display: block;">
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <label>Prénom</label>
                     <input type="text" name="prenom" value="{{ old('prenom') }}" placeholder="Prénom de l'étudiant"
                         required>
+                    @error('prenom')
+                        <span style="color: #ef4444; font-size: 0.75rem; margin-top: 5px; display: block;">
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <label>Date de Naissance</label>
@@ -45,6 +60,11 @@
                     <label>Téléphone</label>
                     <input type="tel" name="telephone" value="{{ old('telephone') }}" placeholder="+221..."
                         required>
+                    @error('telephone')
+                        <span style="color: #ef4444; font-size: 0.75rem; margin-top: 5px; display: block;">
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <label>Année</label>
@@ -61,6 +81,11 @@
                     <label>Adresse</label>
                     <input type="text" name="adresse" value="{{ old('adresse') }}" placeholder="Adresse complète"
                         required>
+                    @error('adresse')
+                        <span style="color: #ef4444; font-size: 0.75rem; margin-top: 5px; display: block;">
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
             </div>
             <button type="submit" class="btn-submit">Enregistrer les informations</button>

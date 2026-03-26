@@ -39,7 +39,7 @@ class User extends Authenticatable
                 $firstLetter = mb_substr($words[0], 0, 1);
                 $lastLetter = mb_substr(end($words), 0, 1);
 
-                return strtoupper($firstLetter . $lastLetter);
+                return strtoupper($firstLetter .$lastLetter);
             },
 
         );

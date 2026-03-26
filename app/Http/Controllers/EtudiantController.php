@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Annee;
 use App\Models\Etudiant;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
 
 class EtudiantController extends Controller
 {
@@ -30,7 +32,7 @@ class EtudiantController extends Controller
 
         $etudiants = $query->with('annee')
             ->latest()
-            ->paginate(10)
+            ->paginate(5)
             ->withQueryString();
 
         $totalEtudiants = Etudiant::count();
@@ -57,7 +59,15 @@ class EtudiantController extends Controller
     {
         $validated = $request->validate([
             'matricule'     => 'required|unique:etudiants,matricule',
-            'nom'           => 'required|string|max:50',
+            'nom'           => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('etudiants')->where(function ($query) use ($request) {
+                    return $query->where('nom', $request->nom)
+                        ->where('prenom', $request->prenom);
+                }),
+            ],
             'prenom'        => 'required|string|max:50',
             'date_naissance' => [
                 'required',
@@ -68,7 +78,7 @@ class EtudiantController extends Controller
             ],
             'sexe'          => 'required|in:Masculin,Féminin',
             'adresse'       => 'required|string',
-            'telephone'     => 'required|string',
+            'telephone'     => 'required|numeric|digits:10',
             'annee_id'      => 'required|exists:annees,id',
         ]);
 
@@ -103,7 +113,13 @@ class EtudiantController extends Controller
     {
         $validated = $request->validate([
             'matricule'     => 'required|unique:etudiants,matricule,' . $id,
-            'nom'           => 'required|string|max:50',
+            'nom' => [
+                'required',
+                Rule::unique('etudiants')->where(function ($query) use ($request) {
+                    return $query->where('nom', $request->nom)
+                        ->where('prenom', $request->prenom);
+                })->ignore($id),
+            ],
             'prenom'        => 'required|string|max:50',
             'date_naissance' => 'required|date',
             'sexe'          => 'required|in:Masculin,Féminin',

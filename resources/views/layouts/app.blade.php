@@ -1138,6 +1138,53 @@
 
         }
 
+        <style>
+
+        /* --- PAGINATION CUSTOM (Indispensable pour le thème sombre) --- */
+        .pagination-container {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            border-radius: 10px;
+            overflow: hidden;
+            gap: 5px;
+        }
+
+        .page-link {
+            background: #1e293b;
+            /* Couleur de votre sidebar/carte */
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 18px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .page-item.active .page-link {
+            background: var(--primary) !important;
+            /* Votre couleur jaune/dorée */
+            color: #000 !important;
+            font-weight: bold;
+        }
+
+        .page-item.disabled .page-link {
+            background: rgba(255, 255, 255, 0.02);
+            color: #444;
+        }
+
+        /* Masquer le texte "Showing 1 to 5 of 20 results" qui casse souvent le layout */
+        .pagination-container nav div:first-child {
+            display: none;
+        }
+    </style>
+
     </style>
     </style>
     @stack('styles')

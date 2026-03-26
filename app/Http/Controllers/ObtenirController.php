@@ -29,11 +29,20 @@ class ObtenirController extends Controller
             $query->where('diplome_id', $request->diplome_id);
         }
 
+        // NOUVEAU : Filtre par Mention
+        if ($request->filled('mention')) {
+            $query->where('mention', $request->mention);
+        }
+
         // 4. Récupérer les résultats
-        $obtenirs = $query->orderBy('date_obtention', 'desc')->get();
+        $obtenirs = $query->orderBy('date_obtention', 'desc')
+            ->paginate(5)
+            ->withQueryString();
 
         // 5. Récupérer les données pour les menus déroulants des filtres
         $diplomes = Diplome::all();
+
+        $mentions = ['Passable', 'Assez-bien', 'Bien', 'Très Bien'];
 
         // Récupérer les années uniques de la table obtenirs pour le filtre
         $annees = Obtenir::selectRaw('YEAR(date_obtention) as year')
@@ -43,7 +52,7 @@ class ObtenirController extends Controller
 
         $etudiants = Etudiant::all();
         $diplomes = Diplome::all();
-        return view('obtenirs.index', compact('obtenirs', 'etudiants', 'diplomes', 'annees'));
+        return view('obtenirs.index', compact('obtenirs', 'etudiants', 'diplomes', 'annees', 'mentions'));
     }
 
     /**
@@ -119,11 +128,15 @@ class ObtenirController extends Controller
 
     public function generatePdf(Request $request)
     {
+        // 1. Récupération des filtres
         $annee = $request->input('annee');
         $diplome_id = $request->input('diplome_id');
+        $mention = $request->input('mention');
 
+        // 2. Initialisation de la requête
         $query = Obtenir::with(['etudiant', 'diplome']);
 
+        // 3. Application des filtres sur la requête SQL
         if ($request->filled('annee')) {
             $query->whereYear('date_obtention', $annee);
         }
@@ -132,9 +145,17 @@ class ObtenirController extends Controller
             $query->where('diplome_id', $diplome_id);
         }
 
+        // AJOUT : On applique le filtre mention ici pour filtrer les résultats !
+        if ($request->filled('mention')) {
+            $query->where('mention', $mention);
+        }
+
+        // 4. Récupération des données filtrées
         $obtenirs = $query->orderBy('date_obtention', 'desc')->get();
 
+        // 5. Préparation des libellés pour l'en-tête du PDF
         $filtre_annee = $annee ?? 'Toutes';
+        $filtre_mention = $mention ?? 'Toutes';
         $filtre_diplome = 'Tous';
 
         if ($request->filled('diplome_id')) {
@@ -144,17 +165,17 @@ class ObtenirController extends Controller
             }
         }
 
-        // Chargement de la vue
+        // 6. Génération du PDF
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('obtenirs.pdf', [
             'obtenirs' => $obtenirs,
             'filtre_annee' => $filtre_annee,
             'filtre_diplome' => $filtre_diplome,
+            'filtre_mention' => $filtre_mention,
             'date_edition' => now()->format('d/m/Y')
         ]);
 
         $pdf->setPaper('a4', 'portrait');
 
-        // stream() affiche dans le navigateur, download() télécharge directement
         return $pdf->stream('liste_diplomes.pdf');
     }
 }

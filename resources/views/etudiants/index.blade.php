@@ -131,6 +131,21 @@
     </div>
     @include('etudiants.create')
 
+    <!-- 1. Importer la bibliothèque Inputmask -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Appliquer le masque sur le champ téléphone
+            // Masque pour 10 chiffres (ex: 06 12 34 56 78)
+            $('#telephone').inputmask("99 99 99 99 99");
+
+            // Si vous préférez sans espaces, utilisez :
+            // $('#telephone').inputmask("9999999999");
+        });
+    </script>
+
 
 
     <script>

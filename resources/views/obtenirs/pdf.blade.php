@@ -19,7 +19,7 @@
     </div>
 
     <div class="filters">
-        Filtres appliqués : Année <strong>{{ $filtre_annee }}</strong> | Diplôme : <strong>{{ $filtre_diplome }}</strong>
+        Filtres appliqués : Année <strong>{{ $filtre_annee }}</strong> | Diplôme : <strong>{{ $filtre_diplome }}</strong> | Mention : <strong>{{$filtre_mention}}</strong>
     </div>
 
     <table>

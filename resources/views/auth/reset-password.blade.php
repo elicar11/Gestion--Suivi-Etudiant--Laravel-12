@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
+    <title>Nouveau mot de passe</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="{{ asset('graduation-cap-solid.svg') }}">
     <style>
@@ -136,64 +135,41 @@
         }
     </style>
 </head>
-
 <body>
-
     <div class="login-card">
-        <div class="logo-area">
-            <i class="fas fa-user-graduate"></i>
-        </div>
-        <h1>Suivi Étudiant</h1>
-        <p class="subtitle">Accédez à votre historique d'étudiant Diplômé</p>
+        <div class="logo-area"><i class="fas fa-user-shield"></i></div>
+        <h1>Nouveau mot de passe</h1>
+        <p class="subtitle">Créez votre nouveau mot de passe sécurisé</p>
 
-        <form id="formLogin" method="post" action="{{ route('login.process') }}">
+        <form method="POST" action="{{ route('password.update') }}">
             @csrf
-            @if (session('status'))
-                <div style="color: #ff4d4d; margin-bottom: 15px; text-align: center; font-size: 0.9rem;">
-                    {{ session('status') }}
-                </div>
-            @endif
+            <input type="hidden" name="token" value="{{ $token }}">
+
+            <div class="input-box">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" value="{{ $email ?? old('email') }}" required readonly>
+            </div>
+
+            <div class="input-box">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Nouveau mot de passe" required>
+            </div>
+
+            <div class="input-box">
+                <i class="fas fa-check-double"></i>
+                <input type="password" name="password_confirmation" placeholder="Confirmer le mot de passe" required>
+            </div>
 
             @if ($errors->any())
-                <div style="color: #ff4d4d; margin-bottom: 15px; text-align: left; font-size: 0.9rem;">
+                <div style="color: #ff4d4d; font-size: 0.8rem; margin-bottom: 10px; text-align: left;">
                     @foreach ($errors->all() as $error)
-                        <p><i class="fas fa-exclamation-circle"></i> {{ $error }}</p>
+                        <p>{{ $error }}</p>
                     @endforeach
                 </div>
             @endif
-            <div class="input-box">
-                <i class="fas fa-envelope"></i>
-                <input type="email" placeholder="Email" name="email" required>
-            </div>
-            <div class="input-box">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="pass" placeholder="Mot de passe" name="password" required>
-                <i class="fas fa-eye-slash toggle-password" onclick="toggleView()"></i>
-            </div>
-            <button type="submit" class="btn-login">Se connecter</button>
+
+            <button type="submit" class="btn-login">Réinitialiser le mot de passe</button>
         </form>
-
-        <div class="footer-links">
-            <p style="margin-bottom: 10px;">
-                <a href="{{ route('password.request') }}">Mot de passe oublié ?</a>
-            </p>
-            <p>Pas encore inscrit ? <a href="/inscription">Créer un compte</a></p>
-        </div>
     </div>
-
-    <script>
-        function toggleView() {
-            const passInput = document.getElementById('pass');
-            const icon = document.querySelector('.toggle-password');
-            if (passInput.type === 'password') {
-                passInput.type = 'text';
-                icon.classList.replace('fa-eye-slash', 'fa-eye');
-            } else {
-                passInput.type = 'password';
-                icon.classList.replace('fa-eye', 'fa-eye-slash');
-            }
-        }
-    </script>
 </body>
-
 </html>

@@ -74,6 +74,23 @@
                 </select>
             </div>
 
+            <!-- Filtre Mention -->
+            <div class="filter-group">
+                <label for="mention" style="display: block; margin-bottom: 5px; font-weight: bold;">Mention :</label>
+                <select name="mention" id="mention" class="form-control"
+                    style="padding: 8px; border-radius: 4px; border: 1px solid;">
+                    <option value="">Toutes les mentions</option>
+                    @php
+                        $mentions = ['Passable', 'Assez-bien', 'Bien', 'Très Bien'];
+                    @endphp
+                    @foreach ($mentions as $m)
+                        <option value="{{ $m }}" {{ request('mention') == $m ? 'selected' : '' }}>
+                            {{ $m }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             <!-- Boutons -->
             <div class="filter-actions">
                 <button type="submit" class="btn-add" style="background-color: #3498db; margin-bottom: 0;">
@@ -150,6 +167,9 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
+    <div class="pagination-container" style="margin-top: 20px; display: flex; justify-content: center;">
+        {{ $obtenirs->appends(request()->query())->links('pagination::bootstrap-4') }}
     </div>
     </main>
     @include('obtenirs.create')
